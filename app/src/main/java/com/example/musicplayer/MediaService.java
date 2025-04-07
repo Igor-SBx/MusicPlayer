@@ -92,7 +92,7 @@ public class MediaService extends Service {
             String action = intent.getAction() == null ? "NULL_ACTION" : intent.getAction();
             switch (action){
                 case MediaService.PLAY:
-                   playAudio(intent.getStringExtra("path"));
+                   playAudio(intent.getIntExtra("path", 18000000));
                     break;
                 case MediaService.PAUSE:
                    pauseAudio();
@@ -109,12 +109,14 @@ public class MediaService extends Service {
         return START_STICKY;
     }
 
-    private void playAudio(String path) {
+    private void playAudio(int songId) {
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(path);
-            mediaPlayer.prepare();
+
+            //mediaPlayer = MediaPlayer.create(this, songId);
+            mediaPlayer = MediaPlayer.create(this, R.raw.song_1);
             mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(completionListener);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,6 +131,20 @@ public class MediaService extends Service {
         mediaPlayer.stop();
         stopForeground(true);
         stopSelf();
+    }
+
+    private MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            releaseMediaPlayer();
+        }
+    };
+
+    private void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @Override

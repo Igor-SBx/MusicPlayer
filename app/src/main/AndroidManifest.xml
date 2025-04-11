@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer"
         tools:targetApi="31">
+
+        <service android:name=".AudioService" android:foregroundServiceType="media" android:process=":remote"/>
+
         <service
             android:name=".MediaService"
             android:enabled="true"

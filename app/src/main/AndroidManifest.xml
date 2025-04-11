@@ -20,7 +20,7 @@
         android:theme="@style/Theme.MusicPlayer"
         tools:targetApi="31">
 
-        <service android:name=".AudioService" android:foregroundServiceType="media" android:process=":remote"/>
+        <service android:name=".Services.AudioService" android:foregroundServiceType="mediaPlayback|mediaProcessing" android:process=":remote"/>
 
         <service
             android:name=".MediaService"

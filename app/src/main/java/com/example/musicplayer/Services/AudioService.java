@@ -103,7 +103,6 @@ public class AudioService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-
         return null;
     }
 
@@ -127,7 +126,6 @@ public class AudioService extends Service {
     private Notification createNotification(){
 
         Intent notificationIntent = new Intent(this, MainActivity.class); // Substitua MainActivity pelo nome da sua Activity
-
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         return new NotificationCompat.Builder(this, CHANNEL_ID)

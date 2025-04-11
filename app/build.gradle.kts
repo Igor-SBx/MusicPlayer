@@ -41,4 +41,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("androidx.core:core-ktx:1.12.0") // ou versão mais recente
 }

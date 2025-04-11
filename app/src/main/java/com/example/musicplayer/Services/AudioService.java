@@ -17,7 +17,10 @@ import android.support.v4.media.session.MediaSessionCompat;
 
 
 // ... (Importações necessárias) ...
+import androidx.core.app.NotificationCompat;
+
 import com.example.musicplayer.MainActivity;
+import com.example.musicplayer.R;
 
 public class AudioService extends Service {
 
@@ -127,7 +130,7 @@ public class AudioService extends Service {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        return new Notification.Builder(this, CHANNEL_ID)
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Audio Player")
                 .setContentText("Tocando música...")
                 .setSmallIcon(R.drawable.ic_launcher_foreground) // Substitua pelo seu ícone

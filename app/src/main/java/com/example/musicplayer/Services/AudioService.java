@@ -1,5 +1,13 @@
 package com.example.musicplayer.Services;
 
+/*
+*
+* NOTA IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+* Criei a Classe por eu estar enfrentando um problema de compatibilidade. Mas se a Media Service funcionar para vocês, podem deletar AudioService.java
+*
+*
+* */
+
 // AudioService.java
 
 import android.app.Notification;

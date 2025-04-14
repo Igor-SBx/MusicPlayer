@@ -4,11 +4,14 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import com.example.musicplayer.databinding.FragmentEqualizerBinding;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +35,7 @@ public class EqualizerFragment extends Fragment {
     private SeekBar seekbar1;
     private SeekBar seekbar2;
     private MediaPlayer mediaPlayer;
-
+    private FragmentEqualizerBinding binding;
     public EqualizerFragment() {
         // Required empty public constructor
     }
@@ -63,10 +66,21 @@ public class EqualizerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        seekbar1 = getView().findViewById(R.id.seekBar);
-        seekbar2 = getView().findViewById(R.id.seekBar2);
 
-        seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        //return inflater.inflate(R.layout.fragment_equalizer, container, false);
+
+        // Infla o layout usando View Binding
+       binding = FragmentEqualizerBinding.inflate(inflater, container, false);
+
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int level, boolean b) {
@@ -87,12 +101,6 @@ public class EqualizerFragment extends Fragment {
             }
         });
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_equalizer, container, false);
+       return binding.getRoot();
     }
 }

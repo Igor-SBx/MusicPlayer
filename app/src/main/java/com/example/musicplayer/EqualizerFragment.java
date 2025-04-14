@@ -31,9 +31,6 @@ public class EqualizerFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private SeekBar seekbar1;
-    private SeekBar seekbar2;
     private MediaPlayer mediaPlayer;
     private FragmentEqualizerBinding binding;
     public EqualizerFragment() {
@@ -66,9 +63,6 @@ public class EqualizerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
     }
 
     @Override

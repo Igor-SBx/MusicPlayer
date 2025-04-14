@@ -5,12 +5,38 @@
 // equalizer.cpp
 
 #include <jni.h>
+#include <vector>
+#include <android/log.h>
 
+#define LOG_TAG "equalizer"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
+struct Equalizer {
+    bool enabled = true;
+    std::vector<float> bandGains;
+};
+static Equalizer* eq = nullptr;
 
+extern "C" JNIEXPORT void JNICALL
+
+Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_init(
+        JNIEnv* env,
+        jobject thiz,
+        jint audioSessionId,
+        jint sampleRate,
+        jint numBands) {
+
+    if (eq != nullptr) {
+        delete eq;
+    }
+
+    eq = new Equalizer();
+    eq->bandGains.resize(numBands, 1.0f);
+
+    LOGD("Equalizer initialized with %d bands @ %d Hz", numBands, sampleRate);
+}
 
 extern "C" JNIEXPORT jint JNICALL Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_applyEqualization(JNIEnv *env, jobject thiz, jshortArray audioData, jintArray gains){
-
 
 
     //Recuperando os dados
@@ -50,3 +76,4 @@ extern "C" JNIEXPORT jint JNICALL Java_com_example_musicplayer_EqualizerSystem_A
     return numSamples;
 
 }
+

@@ -34,17 +34,22 @@ public class MediaService extends Service {
     private AudioManager audioManager;
     private MediaSessionCompat mediaSession;
     private AudioEqualizer audioEqualizer;
+    private short[] audioBuffer = new short[1024]; // Buffer para processamento
+    private int numBands = 5; // Número de bandas do equalizador
 
     @SuppressLint("ForegroundServiceType")
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mediaPlayer = new MediaPlayer();
+
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaSession = new MediaSessionCompat(this, "MediaService");
         // Java JNI
         audioEqualizer = new AudioEqualizer();
+
+        //audioEqualizer.applyEqualization(44100, bandGains);
+        audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
 
         createNotificationChannel();
         Notification notification = createNotification();

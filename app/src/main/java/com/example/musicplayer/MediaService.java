@@ -17,6 +17,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.musicplayer.EqualizerSystem.AudioEqualizer;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -31,6 +33,7 @@ public class MediaService extends Service {
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSession;
+    private AudioEqualizer audioEqualizer;
 
     @SuppressLint("ForegroundServiceType")
     @Override
@@ -40,6 +43,8 @@ public class MediaService extends Service {
         mediaPlayer = new MediaPlayer();
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaSession = new MediaSessionCompat(this, "MediaService");
+        // Java JNI
+        audioEqualizer = new AudioEqualizer();
 
         createNotificationChannel();
         Notification notification = createNotification();

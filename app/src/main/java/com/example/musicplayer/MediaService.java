@@ -47,9 +47,17 @@ public class MediaService extends Service {
         mediaSession = new MediaSessionCompat(this, "MediaService");
         // Java JNI
         audioEqualizer = new AudioEqualizer();
+        mediaPlayer = new MediaPlayer();
 
-        //audioEqualizer.applyEqualization(44100, bandGains);
-        audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
+        mediaPlayer.setOnPreparedListener(mp->{
+            // Inicializa o equalizador quando o MediaPlayer estiver pronto
+            audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
+
+            // Configura ganhos padrão (flat)
+            for (int i = 0; i < numBands; i++) {
+                audioEqualizer.setBandGain(i, 1.0f);
+            }
+        });
 
         createNotificationChannel();
         Notification notification = createNotification();
@@ -123,7 +131,7 @@ public class MediaService extends Service {
         try {
             mediaPlayer.reset();
 
-            //mediaPlayer = MediaPlayer.create(this, songId);
+            mediaPlayer = MediaPlayer.create(this, songId);
             mediaPlayer = MediaPlayer.create(this, R.raw.song_1);
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(completionListener);

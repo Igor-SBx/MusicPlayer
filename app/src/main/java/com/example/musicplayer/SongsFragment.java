@@ -41,18 +41,12 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         songAdapter.setOnItemClickListener(this);
         songListView.setAdapter(songAdapter);
 
-//        songListView.setOnClickListener((parent, View, int position, id) -> {
-//            String selected = songList.get(position);
-//            // Iniciar mediaservice
-//        });
-
-
         return view;
     }
 
     @Override
     public void onItemClick(String songName, int position){
-        Toast.makeText(getContext(), "test", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), songName, Toast.LENGTH_LONG).show();
     }
 
 

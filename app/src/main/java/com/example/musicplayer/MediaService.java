@@ -111,6 +111,7 @@ public class MediaService extends Service {
             switch (action){
                 case MediaService.PLAY:
                    playAudio(intent.getIntExtra("path", 18000000));
+                   Log.e("Musica", "Play");
                     break;
                 case MediaService.PAUSE:
                    pauseAudio();

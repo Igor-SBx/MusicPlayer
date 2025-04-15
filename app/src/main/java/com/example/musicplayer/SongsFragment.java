@@ -1,5 +1,7 @@
 package com.example.musicplayer;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,7 +21,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
     RecyclerView songListView;
     SongAdapter songAdapter;
-
+    private MediaService mediaService;
     public SongsFragment() {
     }
 
@@ -29,7 +31,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         View view = inflater.inflate(R.layout.fragment_songs, container, false);
         songListView = view.findViewById(R.id.recycler_view);
         songListView.setHasFixedSize(true);
-
+        mediaService = new MediaService();
         ArrayList<String> songList = new ArrayList<>(
                 Arrays.asList(
                         "Bright is the Ring of Words - Ron Meixsell and Wahneta Meixsell",
@@ -47,6 +49,15 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
     @Override
     public void onItemClick(String songName, int position){
         Toast.makeText(getContext(), songName, Toast.LENGTH_LONG).show();
+        Intent serviceIntent = new Intent(getActivity(), MediaService.class);
+        serviceIntent.setAction(MediaService.PLAY);
+        //        mediaService.onStartCommand();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().startForegroundService(serviceIntent);
+        } else {
+            requireActivity().startService(serviceIntent);
+        }
     }
 
 

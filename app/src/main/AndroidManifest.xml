@@ -20,13 +20,14 @@
         android:theme="@style/Theme.MusicPlayer"
         tools:targetApi="31">
 
-        <service android:name=".Services.AudioService" android:foregroundServiceType="mediaPlayback|mediaProcessing" android:process=":remote"/>
+
 
         <service
-            android:name=".MediaService"
+            android:name=".Services.MediaService"
             android:enabled="true"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="true"></service>
+            android:foregroundServiceType="mediaPlayback|mediaProcessing"
+            android:exported="true"
+            android:process=":remote" />
 
         <activity
             android:name=".MainActivity"

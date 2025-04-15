@@ -5,14 +5,13 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.example.musicplayer.Services.MediaService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +47,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(String songName, int position){
-        
+
         Intent serviceIntent = new Intent(getActivity(), MediaService.class);
         serviceIntent.setAction(MediaService.PLAY);
         //        mediaService.onStartCommand();

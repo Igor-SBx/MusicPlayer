@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.Services;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -18,9 +18,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.musicplayer.EqualizerSystem.AudioEqualizer;
-
-import java.io.IOException;
-import java.util.Objects;
+import com.example.musicplayer.MainActivity;
+import com.example.musicplayer.R;
 
 public class MediaService extends Service {
 

@@ -48,7 +48,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(String songName, int position){
-        Toast.makeText(getContext(), songName, Toast.LENGTH_LONG).show();
+        
         Intent serviceIntent = new Intent(getActivity(), MediaService.class);
         serviceIntent.setAction(MediaService.PLAY);
         //        mediaService.onStartCommand();

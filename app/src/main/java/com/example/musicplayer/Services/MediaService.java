@@ -1,4 +1,4 @@
-package com.example.musicplayer.Services;
+package com.example.musicplayer;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -18,6 +18,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.musicplayer.EqualizerSystem.AudioEqualizer;
+import com.example.musicplayer.notification.MediaNotificationManager;
 import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.R;
 
@@ -27,95 +28,54 @@ public class MediaService extends Service {
     public static final String PAUSE = "PAUSE";
     public static final String STOP = "STOP";
 
-    private static final String CHANNEL_ID = "MusicPlayer";
-    private static final String CHANNEL_NAME = "MusicPlayer";
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSession;
+    private MediaNotificationManager notificationManager;
     private AudioEqualizer audioEqualizer;
-    private short[] audioBuffer = new short[1024]; // Buffer para processamento
-    private int numBands = 5; // Número de bandas do equalizador
 
-    @SuppressLint("ForegroundServiceType")
+    private int currentSongId = R.raw.song_1;
+    private boolean isPlaying = false;
+    private int numBands = 5;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaSession = new MediaSessionCompat(this, "MediaService");
-        // Java JNI
+
         audioEqualizer = new AudioEqualizer();
         mediaPlayer = new MediaPlayer();
 
-        mediaPlayer.setOnPreparedListener(mp->{
-            // Inicializa o equalizador quando o MediaPlayer estiver pronto
+        mediaPlayer.setOnPreparedListener(mp -> {
             audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
-
-            // Configura ganhos padrão (flat)
             for (int i = 0; i < numBands; i++) {
                 audioEqualizer.setBandGain(i, 1.0f);
             }
         });
 
-        createNotificationChannel();
-        Notification notification = createNotification();
-        startForeground(1, notification);
-    }
+        mediaPlayer.setOnCompletionListener(mediaPlayer -> releaseMediaPlayer());
 
-    private void createNotificationChannel(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-    }
-
-    private Notification createNotification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent notificationIntent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    this,
-                    0,
-                    notificationIntent,
-                    PendingIntent.FLAG_IMMUTABLE
-            );
-
-            Notification notification = null;
-
-            notification = new Notification.Builder(this, CHANNEL_ID)
-                    .setContentText("Tocando agora: ")
-                    .setContentTitle("MusicPlayer")
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentIntent(pendingIntent)
-                    .build();
-
-            return notification;
-        }
-
-        return null;
+        notificationManager = new MediaNotificationManager(this, mediaSession);
+        startForeground(1, notificationManager.createNotification(isPlaying, currentSongId));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        if(intent != null){
+        if (intent != null) {
             String action = intent.getAction() == null ? "NULL_ACTION" : intent.getAction();
-            switch (action){
-                case MediaService.PLAY:
-                   playAudio(intent.getIntExtra("path", 18000000));
-                   Log.e("Musica", "Play");
+            switch (action) {
+                case PLAY:
+                    currentSongId = intent.getIntExtra("path", R.raw.song_1);
+                    playAudio(currentSongId);
                     break;
-                case MediaService.PAUSE:
-                   pauseAudio();
+                case PAUSE:
+                    pauseAudio();
                     break;
-                case MediaService.STOP:
+                case STOP:
                     stopAudio();
                     break;
                 default:
@@ -130,54 +90,53 @@ public class MediaService extends Service {
     private void playAudio(int songId) {
         try {
             mediaPlayer.reset();
-
             mediaPlayer = MediaPlayer.create(this, songId);
-            mediaPlayer = MediaPlayer.create(this, R.raw.song_1);
             mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(completionListener);
+            isPlaying = true;
+            notificationManager.updateNotification(isPlaying, currentSongId);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void pauseAudio() {
-        if (mediaPlayer.isPlaying()){
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+            isPlaying = false;
+            notificationManager.updateNotification(isPlaying, currentSongId);
         }
     }
 
     private void stopAudio() {
-        mediaPlayer.stop();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+        isPlaying = false;
         stopForeground(true);
         stopSelf();
     }
-
-    private MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            releaseMediaPlayer();
-        }
-    };
 
     private void releaseMediaPlayer() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+        isPlaying = false;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        releaseMediaPlayer();
 
-        mediaPlayer.release();
-        mediaPlayer = null;
-
-        mediaSession.release();
-        mediaSession = null;
+        if (mediaSession != null) {
+            mediaSession.release();
+            mediaSession = null;
+        }
     }
 
-    @Override
     @Nullable
+    @Override
     public IBinder onBind(Intent intent) {
         return null;
     }

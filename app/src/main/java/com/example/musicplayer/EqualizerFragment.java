@@ -1,18 +1,26 @@
 package com.example.musicplayer;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
+import com.example.musicplayer.databinding.FragmentEqualizerBinding;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EqualizerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
+
 public class EqualizerFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -23,7 +31,8 @@ public class EqualizerFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private MediaPlayer mediaPlayer;
+    private FragmentEqualizerBinding binding;
     public EqualizerFragment() {
         // Required empty public constructor
     }
@@ -49,6 +58,7 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.song_1);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -59,6 +69,32 @@ public class EqualizerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_equalizer, container, false);
+        //return inflater.inflate(R.layout.fragment_equalizer, container, false);
+
+        // Infla o layout usando View Binding
+       binding = FragmentEqualizerBinding.inflate(inflater, container, false);
+
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int level, boolean b) {
+                if(b) {
+                    float volume = level / 100f; // Converte para 0.0 - 1.0
+                    mediaPlayer.setVolume(volume, volume);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+       return binding.getRoot();
     }
 }

@@ -6,9 +6,20 @@
     tools:context=".EqualizerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:translationY="100px" />
+
+    <SeekBar
+        android:id="@+id/seekBar2"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:max="10"
+        android:progress="3"
+        android:translationY="200px" />
 
 </FrameLayout>

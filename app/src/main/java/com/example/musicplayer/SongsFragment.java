@@ -6,14 +6,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SongsFragment extends Fragment {
+public class SongsFragment extends Fragment implements SongAdapter.OnItemClickListener{
 
     RecyclerView songListView;
     SongAdapter songAdapter;
@@ -36,8 +38,22 @@ public class SongsFragment extends Fragment {
                         )
         );
         songAdapter = new SongAdapter(getContext(), songList);
+        songAdapter.setOnItemClickListener(this);
         songListView.setAdapter(songAdapter);
+
+//        songListView.setOnClickListener((parent, View, int position, id) -> {
+//            String selected = songList.get(position);
+//            // Iniciar mediaservice
+//        });
+
 
         return view;
     }
+
+    @Override
+    public void onItemClick(String songName, int position){
+        Toast.makeText(getContext(), "test", Toast.LENGTH_LONG).show();
+    }
+
+
 }

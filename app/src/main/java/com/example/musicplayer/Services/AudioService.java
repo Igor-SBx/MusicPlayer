@@ -13,6 +13,7 @@ package com.example.musicplayer.Services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import androidx.core.app.NotificationCompat;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
+
+
 
 
 
@@ -131,17 +134,38 @@ public class AudioService extends Service {
         }
     }
 
-    private Notification createNotification(){
+    private Notification createNotification() {
+        // Intent para abrir o app ao clicar na notificação
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        Intent notificationIntent = new Intent(this, MainActivity.class); // Substitua MainActivity pelo nome da sua Activity
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        // Intents para ações
+        Intent playIntent = new Intent(this, AudioService.class);
+        playIntent.setAction("PLAY");
+        PendingIntent playPendingIntent = PendingIntent.getService(this, 1, playIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
+        Intent pauseIntent = new Intent(this, AudioService.class);
+        pauseIntent.setAction("PAUSE");
+        PendingIntent pausePendingIntent = PendingIntent.getService(this, 2, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        Intent stopIntent = new Intent(this, AudioService.class);
+        stopIntent.setAction("STOP");
+        PendingIntent stopPendingIntent = PendingIntent.getService(this, 3, stopIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        // Cria a notificação com os controles
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Audio Player")
                 .setContentText("Tocando música...")
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // Substitua pelo seu ícone
-                .setContentIntent(pendingIntent)
-                .build();
+                .setSmallIcon(R.drawable.ic_launcher_foreground) // Substitua por um ícone de música se tiver
+                .setContentIntent(contentIntent)
+                .addAction(R.drawable.ic_play_arrow, "Play", playPendingIntent)
+                .addAction(R.drawable.ic_pause, "Pause", pausePendingIntent)
+                .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setMediaSession(mediaSession.getSessionToken()))
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+        return builder.build();
     }
 
 }

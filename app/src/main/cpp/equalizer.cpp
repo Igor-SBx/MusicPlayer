@@ -7,6 +7,7 @@
 #include <jni.h>
 #include <vector>
 #include <android/log.h>
+#include <string>
 
 #define LOG_TAG "equalizer"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -50,42 +51,25 @@ Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_setBandGain(
 
 extern "C" JNIEXPORT jint JNICALL Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_applyEqualization(JNIEnv *env, jobject thiz, jshortArray audioData, jintArray gains){
 
-
     //Recuperando os dados
-
+    // JNIEnv *env é um ponteiro para a interface JNI
     jshort* audioDataPtr = env->GetShortArrayElements(audioData, 0);
-
     jint* gainsPtr = env->GetIntArrayElements(gains, 0);
 
-
-
     int numSamples = env->GetArrayLength(audioData);
-
     int numBands = env->GetArrayLength(gains);
-
-
 
     //Aplicando a equalização (Exemplo simples de ganho)
 
     for (int i = 0; i < numSamples; i++) {
-
         for (int j = 0; j < numBands; j++) {
-
             audioDataPtr[i] *= (double)(gainsPtr[j] / 1000.0); //Ajuste o ganho
-
         }
-
     }
 
-
-
     env->ReleaseShortArrayElements(audioData, audioDataPtr, 0);
-
     env->ReleaseIntArrayElements(gains, gainsPtr, 0);
 
-
-
     return numSamples;
-
 }
 

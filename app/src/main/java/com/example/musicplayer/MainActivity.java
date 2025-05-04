@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.musicplayer.MediaService;
+import com.example.musicplayer.Services.MediaService;
 import com.google.android.material.tabs.TabLayout;
 
 

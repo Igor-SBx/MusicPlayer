@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.Services;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;

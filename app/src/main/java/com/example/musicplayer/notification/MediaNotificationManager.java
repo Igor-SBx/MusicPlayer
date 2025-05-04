@@ -15,7 +15,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 
 import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.R;
-import com.example.musicplayer.MediaService;
+import com.example.musicplayer.Services.MediaService;
 
 public class MediaNotificationManager {
 

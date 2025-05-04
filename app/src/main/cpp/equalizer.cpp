@@ -18,25 +18,25 @@ struct Equalizer {
 };
 static Equalizer* eq = nullptr;
 
-//extern "C" JNIEXPORT void JNICALL
-//
-//Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_init(
-//        JNIEnv* env,
-//        jobject thiz,
-//        jint audioSessionId,
-//        jint sampleRate,
-//        jint numBands) {
-//
-//    if (eq != nullptr) {
-//        delete eq;
-//    }
-//
-//    eq = new Equalizer();
-//    eq->bandGains.resize(numBands, 1.0f);
-//
-//    LOGD("Equalizer initialized with %d bands @ %d Hz", numBands, sampleRate);
-//}
-//
+extern "C" JNIEXPORT void JNICALL
+
+Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_init(
+        JNIEnv* env,
+        jobject thiz,
+        jint audioSessionId,
+        jint sampleRate,
+        jint numBands) {
+
+    if (eq != nullptr) {
+        delete eq;
+    }
+
+    eq = new Equalizer();
+    eq->bandGains.resize(numBands, 1.0f);
+
+    LOGD("Equalizer initialized with %d bands @ %d Hz", numBands, sampleRate);
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_setBandGain(
         JNIEnv* env,

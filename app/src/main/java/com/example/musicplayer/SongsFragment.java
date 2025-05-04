@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.musicplayer.MediaService;
+import com.example.musicplayer.Services.MediaService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         Intent serviceIntent = new Intent(getActivity(), MediaService.class);
         serviceIntent.setAction(MediaService.PLAY);
         serviceIntent.putExtra(MediaService.PLAY, songResources[position]);
-        PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
+        //PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

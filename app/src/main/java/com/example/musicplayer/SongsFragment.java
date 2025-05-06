@@ -2,6 +2,7 @@ package com.example.musicplayer;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,6 +23,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
     RecyclerView songListView;
     SongAdapter songAdapter;
+    private MediaPlayer mediaPlayer;
     private MediaService mediaService;
     public SongsFragment() {
     }
@@ -52,9 +54,9 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
         int[] songResources = {R.raw.song_1, R.raw.song_2, R.raw.song_3};
 
-        Intent serviceIntent = new Intent(getActivity(), MediaService.class);
-        serviceIntent.setAction(MediaService.PLAY);
-        serviceIntent.putExtra(MediaService.PLAY, songResources[position]);
+        Intent serviceIntent = new Intent(getActivity(), mediaService.getClass());
+        serviceIntent.setAction(mediaService.PLAY);
+        serviceIntent.putExtra(mediaService.PLAY, songResources[position]);
         //PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
 
 

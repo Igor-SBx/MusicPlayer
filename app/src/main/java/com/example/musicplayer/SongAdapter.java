@@ -1,5 +1,7 @@
 package com.example.musicplayer;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Layout;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,8 +34,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         this.context = context;
     }
 
-    // Método para setar o listener
+    // Metodo para setar o listener
     public void setOnItemClickListener(OnItemClickListener listener) {
+        Toast.makeText(context, "Musica", Toast.LENGTH_SHORT);
         this.listener = listener;
     }
 

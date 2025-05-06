@@ -25,7 +25,7 @@
 
 
         <service
-            android:name=".MediaService"
+            android:name=".Services.MediaService"
             android:enabled="true"
             android:foregroundServiceType="mediaPlayback|mediaProcessing"
             android:exported="true"

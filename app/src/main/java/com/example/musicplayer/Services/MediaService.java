@@ -69,7 +69,7 @@ public class MediaService extends Service {
             String action = intent.getAction() == null ? "NULL_ACTION" : intent.getAction();
             switch (action) {
                 case PLAY:
-                    currentSongId = intent.getIntExtra("path", R.raw.song_1);
+                    currentSongId = intent.getIntExtra("songID", R.raw.song_1);
                     playAudio(currentSongId);
                     break;
                 case PAUSE:
@@ -89,11 +89,18 @@ public class MediaService extends Service {
 
     private void playAudio(int songId) {
         try {
-            mediaPlayer.reset();
             mediaPlayer = MediaPlayer.create(this, songId);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setOnCompletionListener(mp -> stopAudio());
             mediaPlayer.start();
             isPlaying = true;
-            notificationManager.updateNotification(isPlaying, currentSongId);
+            Log.d("MediaService", "Tocando música: " + songId);
+
+//            mediaPlayer.reset();
+//            mediaPlayer = MediaPlayer.create(this, songId);
+//            mediaPlayer.start();
+//            isPlaying = true;
+//            notificationManager.updateNotification(isPlaying, currentSongId);
         } catch (Exception e) {
             e.printStackTrace();
         }

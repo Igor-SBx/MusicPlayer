@@ -72,7 +72,6 @@ public class MediaService extends Service {
                 case PLAY:
                     currentSongId = intent.getIntExtra("path", R.raw.song_1);
                     playAudio(currentSongId);
-                    Log.d("MediaService", "Chegou aqui: FODA-SE ANDROID STUDIO!!!");
                     break;
                 case PAUSE:
                     pauseAudio();

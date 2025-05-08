@@ -21,6 +21,14 @@ import java.util.Arrays;
 
 public class SongsFragment extends Fragment implements SongAdapter.OnItemClickListener{
 
+    static ArrayList<String> SONG_LIST = new ArrayList<>(
+            Arrays.asList(
+                    "Bright is the Ring of Words - Ron Meixsell and Wahneta Meixsell",
+                    "I Feel Great - Jeremy Korpas",
+                    "Strong Self Esteem - Jeremy Korpas"
+            )
+    );
+
     RecyclerView songListView;
     SongAdapter songAdapter;
     private MediaPlayer mediaPlayer;
@@ -35,14 +43,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         songListView = view.findViewById(R.id.recycler_view);
         songListView.setHasFixedSize(true);
 
-        ArrayList<String> songList = new ArrayList<>(
-                Arrays.asList(
-                        "Bright is the Ring of Words - Ron Meixsell and Wahneta Meixsell",
-                        "I Feel Great - Jeremy Korpas",
-                        "Strong Self Esteem - Jeremy Korpas"
-                        )
-        );
-        songAdapter = new SongAdapter(getContext(), songList);
+        songAdapter = new SongAdapter(getContext(), SONG_LIST);
         songAdapter.setOnItemClickListener(this);
         songListView.setAdapter(songAdapter);
 
@@ -51,6 +52,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(String songName, int position){
+
 
         int[] songResources = {R.raw.song_1, R.raw.song_2, R.raw.song_3};
         Intent serviceIntent = new Intent(getActivity(), MediaService.class);
@@ -62,12 +64,10 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireActivity().startForegroundService(serviceIntent);
-            Toast.makeText(getContext(), "debbug IF: "+ position, Toast.LENGTH_SHORT).show();
         } else {
             requireActivity().startService(serviceIntent);
-            Toast.makeText(getContext(), "debbug ELSE", Toast.LENGTH_SHORT).show();
-
         }
+        Toast.makeText(getContext(), "Playing: "+ SONG_LIST.get(position), Toast.LENGTH_SHORT).show();
     }
 
 

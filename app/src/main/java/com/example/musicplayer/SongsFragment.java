@@ -56,7 +56,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         Intent serviceIntent = new Intent(getActivity(), MediaService.class);
         serviceIntent.setAction(MediaService.PLAY);
 
-        serviceIntent.putExtra("songId", songResources[position]);
+        serviceIntent.putExtra("path", songResources[position]);
 //        PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
 
 

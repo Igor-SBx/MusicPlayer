@@ -24,7 +24,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
     RecyclerView songListView;
     SongAdapter songAdapter;
     private MediaPlayer mediaPlayer;
-    private MediaService mediaService;
+
     public SongsFragment() {
     }
 
@@ -34,7 +34,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         View view = inflater.inflate(R.layout.fragment_songs, container, false);
         songListView = view.findViewById(R.id.recycler_view);
         songListView.setHasFixedSize(true);
-        mediaService = new MediaService();
+
         ArrayList<String> songList = new ArrayList<>(
                 Arrays.asList(
                         "Bright is the Ring of Words - Ron Meixsell and Wahneta Meixsell",
@@ -53,11 +53,11 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
     public void onItemClick(String songName, int position){
 
         int[] songResources = {R.raw.song_1, R.raw.song_2, R.raw.song_3};
+        Intent serviceIntent = new Intent(getActivity(), MediaService.class);
+        serviceIntent.setAction(MediaService.PLAY);
 
-        Intent serviceIntent = new Intent(getActivity(), mediaService.getClass());
-        serviceIntent.setAction(mediaService.PLAY);
-        serviceIntent.putExtra(mediaService.PLAY, songResources[position]);
-        //PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
+        serviceIntent.putExtra("songId", songResources[position]);
+//        PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

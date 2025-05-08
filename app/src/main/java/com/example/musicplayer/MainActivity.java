@@ -41,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupService(){
-        Intent mediaServiceIntent = new Intent(this, MediaService.class);
-        mediaServiceIntent.setAction(MediaService.PLAY);
-        //mediaServiceIntent.putExtra("path", R.raw.song_3);
-
-        startService(mediaServiceIntent);
+//        Intent mediaServiceIntent = new Intent(this, MediaService.class);
+//        mediaServiceIntent.setAction(MediaService.PLAY);
+//        mediaServiceIntent.putExtra("path", R.raw.song_3);
+//
+//        startService(mediaServiceIntent);
     }
 
     @Override

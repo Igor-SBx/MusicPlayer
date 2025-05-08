@@ -41,7 +41,7 @@ public class MediaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Log.d("MediaService", "Criado");
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaSession = new MediaSessionCompat(this, "MediaService");
 
@@ -67,10 +67,12 @@ public class MediaService extends Service {
 
         if (intent != null) {
             String action = intent.getAction() == null ? "NULL_ACTION" : intent.getAction();
+            Log.d("MediaService", "Recebida ação: " + action); // ← LOG PARA DEBUG
             switch (action) {
                 case PLAY:
-                    currentSongId = intent.getIntExtra("songID", R.raw.song_1);
+                    currentSongId = intent.getIntExtra("path", R.raw.song_1);
                     playAudio(currentSongId);
+                    Log.d("MediaService", "Chegou aqui: FODA-SE ANDROID STUDIO!!!");
                     break;
                 case PAUSE:
                     pauseAudio();
@@ -89,18 +91,19 @@ public class MediaService extends Service {
 
     private void playAudio(int songId) {
         try {
-            mediaPlayer = MediaPlayer.create(this, songId);
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setOnCompletionListener(mp -> stopAudio());
-            mediaPlayer.start();
-            isPlaying = true;
-            Log.d("MediaService", "Tocando música: " + songId);
-
-//            mediaPlayer.reset();
 //            mediaPlayer = MediaPlayer.create(this, songId);
+//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//            mediaPlayer.setOnCompletionListener(mp -> stopAudio());
 //            mediaPlayer.start();
 //            isPlaying = true;
+//            Log.d("MediaService", "Tocando música: " + songId);
 //            notificationManager.updateNotification(isPlaying, currentSongId);
+
+            mediaPlayer.reset();
+            mediaPlayer = MediaPlayer.create(this, songId);
+            mediaPlayer.start();
+            isPlaying = true;
+            notificationManager.updateNotification(isPlaying, currentSongId);
         } catch (Exception e) {
             e.printStackTrace();
         }

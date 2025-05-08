@@ -1,17 +1,26 @@
-package com.example.musicplayer;
+package com.example.musicplayer.Services;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.IBinder;
+
+import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import android.support.v4.media.session.MediaSessionCompat;
 
 import com.example.musicplayer.EqualizerSystem.AudioEqualizer;
 import com.example.musicplayer.notification.MediaNotificationManager;
+import com.example.musicplayer.MainActivity;
+import com.example.musicplayer.R;
 
 public class MediaService extends Service {
 
@@ -32,7 +41,7 @@ public class MediaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Log.d("MediaService", "Criado");
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaSession = new MediaSessionCompat(this, "MediaService");
 
@@ -58,10 +67,12 @@ public class MediaService extends Service {
 
         if (intent != null) {
             String action = intent.getAction() == null ? "NULL_ACTION" : intent.getAction();
+            Log.d("MediaService", "Recebida ação: " + action); // ← LOG PARA DEBUG
             switch (action) {
                 case PLAY:
                     currentSongId = intent.getIntExtra("path", R.raw.song_1);
                     playAudio(currentSongId);
+                    Log.d("MediaService", "Chegou aqui: FODA-SE ANDROID STUDIO!!!");
                     break;
                 case PAUSE:
                     pauseAudio();
@@ -80,6 +91,14 @@ public class MediaService extends Service {
 
     private void playAudio(int songId) {
         try {
+//            mediaPlayer = MediaPlayer.create(this, songId);
+//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//            mediaPlayer.setOnCompletionListener(mp -> stopAudio());
+//            mediaPlayer.start();
+//            isPlaying = true;
+//            Log.d("MediaService", "Tocando música: " + songId);
+//            notificationManager.updateNotification(isPlaying, currentSongId);
+
             mediaPlayer.reset();
             mediaPlayer = MediaPlayer.create(this, songId);
             mediaPlayer.start();

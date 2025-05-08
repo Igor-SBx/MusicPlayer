@@ -4,7 +4,7 @@ public class AudioEqualizer {
 
     static {
 
-        System.loadLibrary("musicplayer"); // Nome da biblioteca nativa
+        System.loadLibrary("equalizer"); // Nome da biblioteca nativa
 
     }
 

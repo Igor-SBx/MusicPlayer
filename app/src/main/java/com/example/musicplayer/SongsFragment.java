@@ -1,22 +1,29 @@
 package com.example.musicplayer;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.example.musicplayer.Services.MediaService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SongsFragment extends Fragment {
+public class SongsFragment extends Fragment implements SongAdapter.OnItemClickListener{
 
     RecyclerView songListView;
     SongAdapter songAdapter;
+    private MediaPlayer mediaPlayer;
 
     public SongsFragment() {
     }
@@ -36,8 +43,32 @@ public class SongsFragment extends Fragment {
                         )
         );
         songAdapter = new SongAdapter(getContext(), songList);
+        songAdapter.setOnItemClickListener(this);
         songListView.setAdapter(songAdapter);
 
         return view;
     }
+
+    @Override
+    public void onItemClick(String songName, int position){
+
+        int[] songResources = {R.raw.song_1, R.raw.song_2, R.raw.song_3};
+        Intent serviceIntent = new Intent(getActivity(), MediaService.class);
+        serviceIntent.setAction(MediaService.PLAY);
+
+        serviceIntent.putExtra("path", songResources[position]);
+//        PendingIntent playPendingIntent = PendingIntent.getService(getActivity(), 2, serviceIntent, PendingIntent.FLAG_IMMUTABLE);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().startForegroundService(serviceIntent);
+            Toast.makeText(getContext(), "debbug IF: "+ position, Toast.LENGTH_SHORT).show();
+        } else {
+            requireActivity().startService(serviceIntent);
+            Toast.makeText(getContext(), "debbug ELSE", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+
 }

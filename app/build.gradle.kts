@@ -19,8 +19,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags += ""
+                cppFlags.add("-std=c++11")
             }
+        }
+        ndk{
+//            abiFilters += listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a")
         }
     }
 
@@ -40,9 +43,11 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
+//            version = "3.22.1"
         }
+
     }
+
 }
 
 dependencies {

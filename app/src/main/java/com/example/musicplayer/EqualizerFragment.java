@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+
+import com.example.musicplayer.EqualizerSystem.AudioEqualizer;
 import com.example.musicplayer.databinding.FragmentEqualizerBinding;
 import java.util.Objects;
 
@@ -79,8 +81,12 @@ public class EqualizerFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int level, boolean b) {
                 if(b) {
-                    float volume = level / 100f; // Converte para 0.0 - 1.0
-                    mediaPlayer.setVolume(volume, volume);
+                    float normalized = level / 100f; // Converte para 0.0 - 1.0
+                    float gain = normalized * 2f - 1f;  // -1.0 a +1.0
+
+                    AudioEqualizer eq = AudioEqualizer.getInstance();
+                    eq.setBandGain(0, gain); // Exemplo: altera a banda 0
+//                    mediaPlayer.setVolume(volume, volume);
                 }
             }
 

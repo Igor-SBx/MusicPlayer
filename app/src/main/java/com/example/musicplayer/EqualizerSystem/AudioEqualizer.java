@@ -8,6 +8,16 @@ public class AudioEqualizer {
 
     }
 
+    private static AudioEqualizer instance;
+
+    private AudioEqualizer() {} // Impede instanciação externa
+
+    public static AudioEqualizer getInstance() {
+        if (instance == null) {
+            instance = new AudioEqualizer();
+        }
+        return instance;
+    }
 
     // Inicializa o equalizador com configurações básicas
     public native void init(int audioSessionId, int sampleRate, int numBands);

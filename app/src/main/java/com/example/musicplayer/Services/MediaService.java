@@ -45,17 +45,9 @@ public class MediaService extends Service {
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaSession = new MediaSessionCompat(this, "MediaService");
 
-        audioEqualizer = new AudioEqualizer();
-
-
-//        mediaPlayer.setOnPreparedListener(mp -> {
-//            audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
-//            for (int i = 0; i < numBands; i++) {
-//                audioEqualizer.setBandGain(i, 1.0f);
-//            }
-//        });
-
-//        mediaPlayer.setOnCompletionListener(mediaPlayer -> releaseMediaPlayer());
+//        audioEqualizer = new AudioEqualizer();
+        audioEqualizer = AudioEqualizer.getInstance();
+//        audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
 
         notificationManager = new MediaNotificationManager(this, mediaSession);
         startForeground(1, notificationManager.createNotification(isPlaying, currentSongId));
@@ -125,17 +117,7 @@ public class MediaService extends Service {
             e.printStackTrace();
             Log.e("MediaService", "Erro ao tocar áudio", e);
         }
-
-//        try {
-//
-//            mediaPlayer.reset();
-//            mediaPlayer = MediaPlayer.create(this, songId);
-//            mediaPlayer.start();
-//            isPlaying = true;
-//            notificationManager.updateNotification(isPlaying, currentSongId);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        
     }
 
     private void pauseAudio() {

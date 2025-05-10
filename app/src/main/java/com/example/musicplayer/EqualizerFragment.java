@@ -35,6 +35,8 @@ public class EqualizerFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private MediaPlayer mediaPlayer;
+    private SeekBar[] seekBars;
+    private final int numBands = 5;
     private FragmentEqualizerBinding binding;
     public EqualizerFragment() {
         // Required empty public constructor
@@ -77,32 +79,67 @@ public class EqualizerFragment extends Fragment {
         // Infla o layout usando View Binding
        binding = FragmentEqualizerBinding.inflate(inflater, container, false);
 
-        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        seekBars = new SeekBar[] {
+                binding.seekBar, binding.seekBar1, binding.seekBar2,
+                binding.seekBar3, binding.seekBar4
+        };
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int level, boolean b) {
-                if(b) {
-                    float normalized = level / 100f; // Converte para 0.0 - 1.0
-                    float gain = normalized * 2f - 1f;  // -1.0 a +1.0
+        //____________________________________
+        for (int i = 0; i < numBands; i++) {
+            final int bandIndex = i;
+            seekBars[i].setMax(100);
+            seekBars[i].setProgress(50); // valor neutro (0.0f)
 
-                    AudioEqualizer eq = AudioEqualizer.getInstance();
-                    eq.setBandGain(0, gain); // Exemplo: altera a banda 0
-                    Log.d("Equalização", "SeekBar");
-//                    mediaPlayer.setVolume(volume, volume);
+            seekBars[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        float gain = (progress / 100f) * 2f - 1f; // -1.0f a +1.0f
+                        AudioEqualizer.getInstance().setBandGain(bandIndex, gain);
+                        Log.d("Equalização", "SeekBar" + bandIndex);
+                        Log.d("Equalização JNI", "Banda " + bandIndex + " ajustada para ganho: " + gain);
+                    }
                 }
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+        }
+        //____________________________________
 
-            }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+//        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+//
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int level, boolean b) {
+//                if(b) {
+//                    float normalized = level / 100f; // Converte para 0.0 - 1.0
+//                    float gain = normalized * 2f - 1f;  // -1.0 a +1.0
+//
+//                    AudioEqualizer eq = AudioEqualizer.getInstance();
+//                    eq.setBandGain(0, gain); // Exemplo: altera a banda 0
+//                    Log.d("Equalização", "SeekBar");
+////                    mediaPlayer.setVolume(volume, volume);
+//                }
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
 
        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

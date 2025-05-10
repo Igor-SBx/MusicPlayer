@@ -47,6 +47,8 @@ Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_setBandGain(
     if (eq && band >= 0 && band < eq->bandGains.size()) {
         eq->bandGains[band] = gain;
     }
+
+    LOGD("Ganho ajustado: banda %d => %.2f", band, gain);  // ← LOG NATIVO
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_applyEqualization(JNIEnv *env, jobject thiz, jshortArray audioData, jintArray gains){

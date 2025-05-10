@@ -1,7 +1,7 @@
 package com.example.musicplayer.EqualizerSystem;
 
 public class AudioEqualizer {
-
+// Initializing
     static {
 
         System.loadLibrary("equalizer"); // Nome da biblioteca nativa

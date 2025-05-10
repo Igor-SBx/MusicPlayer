@@ -46,16 +46,16 @@ public class MediaService extends Service {
         mediaSession = new MediaSessionCompat(this, "MediaService");
 
         audioEqualizer = new AudioEqualizer();
-        mediaPlayer = new MediaPlayer();
 
-        mediaPlayer.setOnPreparedListener(mp -> {
-            audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
-            for (int i = 0; i < numBands; i++) {
-                audioEqualizer.setBandGain(i, 1.0f);
-            }
-        });
 
-        mediaPlayer.setOnCompletionListener(mediaPlayer -> releaseMediaPlayer());
+//        mediaPlayer.setOnPreparedListener(mp -> {
+//            audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
+//            for (int i = 0; i < numBands; i++) {
+//                audioEqualizer.setBandGain(i, 1.0f);
+//            }
+//        });
+
+//        mediaPlayer.setOnCompletionListener(mediaPlayer -> releaseMediaPlayer());
 
         notificationManager = new MediaNotificationManager(this, mediaSession);
         startForeground(1, notificationManager.createNotification(isPlaying, currentSongId));
@@ -71,6 +71,7 @@ public class MediaService extends Service {
             switch (action) {
                 case PLAY:
                     currentSongId = intent.getIntExtra("path", R.raw.song_1);
+                    Log.d("MediaService", "Execução: " + action); // ← LOG PARA DEBUG
                     playAudio(currentSongId);
                     break;
                 case PAUSE:
@@ -89,23 +90,52 @@ public class MediaService extends Service {
     }
 
     private void playAudio(int songId) {
-        try {
-//            mediaPlayer = MediaPlayer.create(this, songId);
-//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//            mediaPlayer.setOnCompletionListener(mp -> stopAudio());
-//            mediaPlayer.start();
-//            isPlaying = true;
-//            Log.d("MediaService", "Tocando música: " + songId);
-//            notificationManager.updateNotification(isPlaying, currentSongId);
 
-            mediaPlayer.reset();
+        try{
+            if (mediaPlayer != null) {
+                mediaPlayer.release();  // Libera o anterior
+            }
+
             mediaPlayer = MediaPlayer.create(this, songId);
-            mediaPlayer.start();
-            isPlaying = true;
-            notificationManager.updateNotification(isPlaying, currentSongId);
+            if (mediaPlayer != null){
+                mediaPlayer.setOnCompletionListener(mp -> releaseMediaPlayer());
+                isPlaying = true;
+
+                // Logs para debug
+                Log.d("MediaService", "MediaPlayer criado, ID do áudio: " + songId);
+                Log.d("Equalizer", "Iniciando equalizador...");
+
+
+                // ✅ Inicializa equalizador aqui!
+                audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
+                Log.d("Equalizer", "Equalizer inicializado com sessionId: " + mediaPlayer.getAudioSessionId());
+
+                for (int i = 0; i < numBands; i++) {
+                    audioEqualizer.setBandGain(i, 1.0f);
+                    Log.d("Equalizer", "Ganho da banda " + i + " setado para 1.0f");
+                }
+
+                mediaPlayer.start();
+                notificationManager.updateNotification(isPlaying, currentSongId);
+            } else{
+                Log.e("MediaService", "MediaPlayer retornou null!");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("MediaService", "Erro ao tocar áudio", e);
         }
+
+//        try {
+//
+//            mediaPlayer.reset();
+//            mediaPlayer = MediaPlayer.create(this, songId);
+//            mediaPlayer.start();
+//            isPlaying = true;
+//            notificationManager.updateNotification(isPlaying, currentSongId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void pauseAudio() {

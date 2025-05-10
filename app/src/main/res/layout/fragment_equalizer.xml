@@ -7,10 +7,77 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:id="@+id/equalizerLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:translationY="100px" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Equalizador"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Banda 0 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banda 0" />
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Banda 1 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banda 1" />
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Banda 2 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banda 2" />
+        <SeekBar
+            android:id="@+id/seekBar2"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Banda 3 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banda 3" />
+        <SeekBar
+            android:id="@+id/seekBar3"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Banda 4 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banda 4" />
+        <SeekBar
+            android:id="@+id/seekBar4"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
 
 </FrameLayout>

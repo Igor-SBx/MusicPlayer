@@ -98,6 +98,7 @@ public class EqualizerFragment extends Fragment {
                         AudioEqualizer.getInstance().setBandGain(bandIndex, gain);
                         Log.d("Equalização", "SeekBar" + bandIndex);
                         Log.d("Equalização JNI", "Banda " + bandIndex + " ajustada para ganho: " + gain);
+                        Log.d("EqualizerFragment", "SeekBar banda " + bandIndex + " ajustada para: " + progress);
                     }
                 }
 

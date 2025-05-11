@@ -38,7 +38,7 @@ Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_init(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_setBandGain(
+Java_com_example_musicplayer_EqualizerSystem_AudioEqualizer_nativeSetBandGain(
         JNIEnv* env,
         jobject thiz,
         jint band,
@@ -82,6 +82,11 @@ extern "C" JNIEXPORT jint JNICALL Java_com_example_musicplayer_EqualizerSystem_A
 
     env->ReleaseShortArrayElements(audioData, audioDataPtr, 0);
     env->ReleaseIntArrayElements(gains, gainsPtr, 0);
+
+    LOGD("applyEqualization chamada com %d amostras, %d bandas", numSamples, numBands);
+    for (int i = 0; i < numBands; i++) {
+        LOGD("applyEqualization gain[%d] = %d", i, gainsPtr[i]);
+    }
 
     return numSamples;
 }

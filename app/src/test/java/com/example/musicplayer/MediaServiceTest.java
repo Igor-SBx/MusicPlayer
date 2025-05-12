@@ -59,16 +59,20 @@ class MediaServiceTest {
 }
  */
 
- package com.example.musicplayer.Services;
+ package com.example.musicplayer;
 
 import android.app.Notification;
 import android.content.Intent;
 import android.media.MediaPlayer;
 
 import androidx.core.app.NotificationCompat;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.musicplayer.Services.AudioPlayer;
+import com.example.musicplayer.Services.MediaService;
 import com.example.musicplayer.notification.MediaNotificationManager;
-
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -96,11 +100,20 @@ class MediaServiceTest {
     @Mock
     private MediaPlayer mockMediaPlayer;
 
+    @Mock
+    private AudioPlayer mockAudioPlayer;
+
     @BeforeEach
     void setUp() throws Exception {
         // Inject our mocks into the private fields of MediaService
         setPrivateField(service, "notificationManager", mockNotificationManager);
-        setPrivateField(service, "mediaPlayer", mockMediaPlayer);
+
+//        service.setNotificationManager(mock(MediaNotificationManager.class));
+
+//        setPrivateField(service, "audioPlayer", mockMediaPlayer);
+        setPrivateField(service, "audioPlayer", mockAudioPlayer);
+
+//        setPrivateField(service, "audioPlayer", mock(AudioPlayer.class));
     }
 
     // -- onStartCommand tests ------------------------------------------------
@@ -108,7 +121,7 @@ class MediaServiceTest {
     @Test
     void onStartCommand_withPlayAction_invokesPlayAudio() {
         // spy the service so we can verify playAudio(...) is called
-        Service spy = Mockito.spy(service);
+        MediaService spy = Mockito.spy(service);
 
         Intent intent = new Intent();
         intent.setAction(MediaService.PLAY);
@@ -121,7 +134,7 @@ class MediaServiceTest {
 
     @Test
     void onStartCommand_withPauseAction_invokesPauseAudio() {
-        Service spy = Mockito.spy(service);
+        MediaService spy = Mockito.spy(service);
 
         Intent intent = new Intent();
         intent.setAction(MediaService.PAUSE);
@@ -133,7 +146,7 @@ class MediaServiceTest {
 
     @Test
     void onStartCommand_withStopAction_invokesStopAudio() {
-        Service spy = Mockito.spy(service);
+        MediaService spy = Mockito.spy(service);
 
         Intent intent = new Intent();
         intent.setAction(MediaService.STOP);
@@ -148,7 +161,7 @@ class MediaServiceTest {
     @Test
     void pauseAudio_whenMediaPlayerPlaying_pausesAndUpdatesNotification() throws Exception {
         // Arrange
-        when(mockMediaPlayer.isPlaying()).thenReturn(true);
+        when(mockAudioPlayer.isPlaying()).thenReturn(true);
         // service.isPlaying defaults to false, but notification update reads it
         setPrivateField(service, "isPlaying", true);
 
@@ -156,7 +169,7 @@ class MediaServiceTest {
         service.pauseAudio();
 
         // Assert
-        verify(mockMediaPlayer).pause();
+        verify(mockAudioPlayer).pause();
         // isPlaying should now be false
         boolean newState = (boolean) getPrivateField(service, "isPlaying");
         assertEquals(false, newState);
@@ -166,11 +179,11 @@ class MediaServiceTest {
 
     @Test
     void pauseAudio_whenMediaPlayerNotPlaying_doesNothing() {
-        when(mockMediaPlayer.isPlaying()).thenReturn(false);
+        when(mockAudioPlayer.isPlaying()).thenReturn(false);
 
         service.pauseAudio();
 
-        verify(mockMediaPlayer, never()).pause();
+        verify(mockAudioPlayer, never()).pause();
         verify(mockNotificationManager, never()).updateNotification(anyBoolean(), anyInt());
     }
 
@@ -183,11 +196,11 @@ class MediaServiceTest {
         service.stopAudio();
 
         // Assert
-        verify(mockMediaPlayer).stop();
+        verify(mockAudioPlayer).stop();
 
         // Because stopForeground() and stopSelf() are final on Service, spy them
         MediaService spy = Mockito.spy(service);
-        setPrivateField(spy, "mediaPlayer", mockMediaPlayer);
+        setPrivateField(spy, "mediaPlayer", mockAudioPlayer);
 
         spy.stopAudio();
         verify(spy).stopForeground(true);

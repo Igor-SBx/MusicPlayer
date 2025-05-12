@@ -1,4 +1,5 @@
-import org.gradle.internal.impldep.org.junit.Test
+//import org.gradle.internal.impldep.org.junit.Test
+import org.gradle.api.tasks.testing.Test
 
 plugins {
     alias(libs.plugins.android.application)
@@ -69,12 +70,13 @@ dependencies {
 
     // Dependência do Mockito para mocks em testes unitários
     testImplementation ("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.0.0")
 
     // Dependência do Mockito para Android
     androidTestImplementation ("org.mockito:mockito-android:4.0.0")
 }
 
-tasks.withType<Test>().configureEach {
+tasks.withType(Test::class.java).configureEach {
     useJUnitPlatform()
 }
 

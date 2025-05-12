@@ -23,12 +23,16 @@ public class AudioPlayer {
     private AudioTrack audioTrack;
 
     private boolean isPlaying = false;
+    private boolean isPaused = false; // Flag de pausa
     private AudioEqualizer audioEqualizer;
     public AudioPlayer(){
         audioEqualizer = AudioEqualizer.getInstance();
     }
     public boolean isPlaying(){
         return isPlaying;
+    }
+    public boolean isPaused() {
+        return isPaused;
     }
     public void play(String filePath) {
         isPlaying = true;
@@ -167,4 +171,25 @@ public class AudioPlayer {
             extractor = null;
         }
     }
+    public void pause() {
+        if (isPlaying && !isPaused) {
+            isPaused = true;
+            if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+                audioTrack.pause();
+                Log.d(TAG, "Reprodução pausada");
+            }
+        }
+    }
+
+    public void resume() {
+        if (isPlaying && isPaused) {
+            isPaused = false;
+            if (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PAUSED) {
+                audioTrack.play();
+                Log.d(TAG, "Reprodução retomada");
+            }
+        }
+    }
+
+
 }

@@ -193,6 +193,9 @@ public class MediaService extends Service {
         }
     }
 
+    public void setNotificationManager(MediaNotificationManager manager) {
+        this.notificationManager = manager;
+    }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

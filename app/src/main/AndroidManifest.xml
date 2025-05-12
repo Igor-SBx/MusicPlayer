@@ -29,7 +29,7 @@
             android:enabled="true"
             android:foregroundServiceType="mediaPlayback|mediaProcessing"
             android:exported="false"
-            android:process=":remote" />
+             />
 
 
         <activity

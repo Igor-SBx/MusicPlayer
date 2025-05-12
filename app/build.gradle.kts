@@ -1,6 +1,9 @@
+import org.gradle.internal.impldep.org.junit.Test
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
 
 android {
     namespace = "com.example.musicplayer"
@@ -61,4 +64,17 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("androidx.core:core-ktx:1.12.0") // ou versão mais recente
+    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testImplementation ("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+
+    // Dependência do Mockito para mocks em testes unitários
+    testImplementation ("org.mockito:mockito-core:4.0.0")
+
+    // Dependência do Mockito para Android
+    androidTestImplementation ("org.mockito:mockito-android:4.0.0")
 }
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+

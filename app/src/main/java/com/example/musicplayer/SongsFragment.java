@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class SongsFragment extends Fragment implements SongAdapter.OnItemClickLi
         songAdapter = new SongAdapter(getContext(), SONG_LIST);
         songAdapter.setOnItemClickListener(this);
         songListView.setAdapter(songAdapter);
-
+        Log.e("Fragment Songs", "Criado");
         return view;
     }
 

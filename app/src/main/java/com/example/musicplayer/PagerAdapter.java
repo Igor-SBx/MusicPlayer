@@ -17,6 +17,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public PagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
 
+
+
         Fragment songsFragment = new SongsFragment();
         String songsFragmentTitle = "Músicas";
 

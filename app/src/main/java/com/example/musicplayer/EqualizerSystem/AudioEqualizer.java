@@ -12,11 +12,12 @@ public class AudioEqualizer {
 
     }
 
-    private static AudioEqualizer instance;
+    private static volatile AudioEqualizer instance;
     private float[] bandGains;
 
     private AudioEqualizer() {
         bandGains = new float[5]; // Use o número de bandas apropriado
+
         for (int i = 0; i < bandGains.length; i++) {
             bandGains[i] = 1.0f;
         }
@@ -24,6 +25,7 @@ public class AudioEqualizer {
 
     public static synchronized AudioEqualizer getInstance() {
         if (instance == null) {
+            Log.e("AudioEqualizer Instance", "NULO!!!"  + " [" + instance + "]");
             instance = new AudioEqualizer();
         }
         return instance;
@@ -34,7 +36,7 @@ public class AudioEqualizer {
     // Define o ganho para uma banda específica (0 a numBands-1)
     public native void nativeSetBandGain(int band, float gain);
 
-    // Novo método Java para manter os ganhos sincronizados
+    // Novo metodo Java para manter os ganhos sincronizados
     public void setBandGain(int band, float gain) {
         if (band >= 0 && band < bandGains.length) {
             bandGains[band] = gain;

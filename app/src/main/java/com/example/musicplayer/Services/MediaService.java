@@ -51,7 +51,7 @@ public class MediaService extends Service {
         mediaSession = new MediaSessionCompat(this, "MediaService");
 
 //        audioEqualizer = new AudioEqualizer();
-        audioEqualizer = AudioEqualizer.getInstance();
+//        audioEqualizer = AudioEqualizer.getInstance();
 //        audioEqualizer.init(mediaPlayer.getAudioSessionId(), 44100, numBands);
 
         notificationManager = new MediaNotificationManager(this, mediaSession);
@@ -86,11 +86,11 @@ public class MediaService extends Service {
         return START_STICKY;
     }
 
-    private void playAudio(int songId) {
+    public void playAudio(int songId) {
 
 
         //_____________________________
-        String path = "android.resource://" + getPackageName() + "/" + songId;
+//        String path = "android.resource://" + getPackageName() + "/" + songId;
         if (audioPlayer != null && audioPlayer.isPlaying()) audioPlayer.stop();
         audioPlayer = new AudioPlayer();
 
@@ -157,7 +157,7 @@ public class MediaService extends Service {
         
     }
 
-    private void pauseAudio() {
+    public void pauseAudio() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             isPlaying = false;
@@ -165,7 +165,7 @@ public class MediaService extends Service {
         }
     }
 
-    private void stopAudio() {
+    public void stopAudio() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }

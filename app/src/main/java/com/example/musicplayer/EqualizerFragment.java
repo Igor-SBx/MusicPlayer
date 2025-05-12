@@ -63,6 +63,7 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("Fragment Equalizer", "Criado");
         mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.song_1);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

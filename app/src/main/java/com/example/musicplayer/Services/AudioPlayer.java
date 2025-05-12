@@ -7,6 +7,7 @@ import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.util.Log;
+import android.util.LogPrinter;
 
 import com.example.musicplayer.EqualizerSystem.AudioEqualizer;
 
@@ -22,7 +23,10 @@ public class AudioPlayer {
     private AudioTrack audioTrack;
 
     private boolean isPlaying = false;
-
+    private AudioEqualizer audioEqualizer;
+    public AudioPlayer(){
+        audioEqualizer = AudioEqualizer.getInstance();
+    }
     public boolean isPlaying(){
         return isPlaying;
     }
@@ -72,7 +76,8 @@ public class AudioPlayer {
                 );
                 audioTrack.play();
 
-                AudioEqualizer.getInstance().init(audioTrack.getAudioSessionId(), sampleRate, 5);
+                audioEqualizer.init(audioTrack.getAudioSessionId(), sampleRate, 5);
+//                Log.e("AudioPlayer", audioEqualizer)
 
                 boolean isEOS = false;
                 long timeoutUs = 10000;

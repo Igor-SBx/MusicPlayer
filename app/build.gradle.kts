@@ -64,9 +64,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("androidx.core:core-ktx:1.12.0") // ou versão mais recente
+    implementation("androidx.core:core-ktx:1.12.0") //
     testImplementation ("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testImplementation ("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testImplementation ("org.robolectric:robolectric:4.11.1") //
+
 
     // Dependência do Mockito para mocks em testes unitários
     testImplementation ("org.mockito:mockito-core:4.0.0")

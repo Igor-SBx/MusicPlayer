@@ -64,7 +64,8 @@ class MediaServiceTest {
 import android.app.Notification;
 import android.content.Intent;
 import android.media.MediaPlayer;
-
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import androidx.core.app.NotificationCompat;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -98,6 +99,9 @@ class MediaServiceTest {
     private MediaNotificationManager mockNotificationManager;
 
     @Mock
+    private Intent  mockIntent;
+
+    @Mock
     private MediaPlayer mockMediaPlayer;
 
     @Mock
@@ -106,12 +110,23 @@ class MediaServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         // Inject our mocks into the private fields of MediaService
-        setPrivateField(service, "notificationManager", mockNotificationManager);
+      //  setPrivateField(service, "notificationManager", mockNotificationManager);
 
-//        service.setNotificationManager(mock(MediaNotificationManager.class));
+        // Injetando o mock via reflexão
+        Field field = MediaService.class.getDeclaredField("notificationManager");
+        field.setAccessible(true);
+        field.set(service, mockNotificationManager);
+
+        // Injetando o mock via reflexão
+        Field field2 = MediaService.class.getDeclaredField("audioPlayer");
+        field2.setAccessible(true);
+        field2.set(service, mockAudioPlayer);
+
+
+     //   service.setNotificationManager(mock(MediaNotificationManager.class));
 
 //        setPrivateField(service, "audioPlayer", mockMediaPlayer);
-        setPrivateField(service, "audioPlayer", mockAudioPlayer);
+       // setPrivateField(service, "audioPlayer", mockAudioPlayer);
 
 //        setPrivateField(service, "audioPlayer", mock(AudioPlayer.class));
     }
@@ -121,15 +136,15 @@ class MediaServiceTest {
     @Test
     void onStartCommand_withPlayAction_invokesPlayAudio() {
         // spy the service so we can verify playAudio(...) is called
-        MediaService spy = Mockito.spy(service);
+        //MediaService spy = Mockito.spy(service);
 
-        Intent intent = new Intent();
-        intent.setAction(MediaService.PLAY);
-        intent.putExtra("path", 42);
 
-        spy.onStartCommand(intent, /*flags=*/0, /*startId=*/0);
+        mockIntent.setAction(MediaService.PLAY);
+        mockIntent.putExtra("path", 42);
 
-        verify(spy, times(1)).playAudio(42);
+        service.onStartCommand(mockIntent, /*flags=*/0, /*startId=*/0);
+
+        verify(service, times(1)).playAudio(42);
     }
 
     @Test
@@ -173,7 +188,7 @@ class MediaServiceTest {
         // isPlaying should now be false
         boolean newState = (boolean) getPrivateField(service, "isPlaying");
         assertEquals(false, newState);
-        verify(mockNotificationManager).updateNotification(false, 
+        verify(mockNotificationManager).updateNotification(false,
             (Integer) getPrivateField(service, "currentSongId"));
     }
 
